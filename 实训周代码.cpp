@@ -1,14 +1,9 @@
-/*
-	18¿Æ¼¼Ò»°à
-	ÕÅºÆ½Ü
-	201824111141
-*/
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 
-/******************** Êı¾İ½á¹¹ ************************/
-// ³ÇÊĞĞÅÏ¢
+/******************** æ•°æ®ç»“æ„ ************************/
+// åŸå¸‚ä¿¡æ¯
 typedef struct City_Type {
 	int id;
 	char name[20];
@@ -16,107 +11,107 @@ typedef struct City_Type {
 	int view;
 }CityType;
 
-// ½»Í¨ĞÅÏ¢
+// äº¤é€šä¿¡æ¯
 typedef struct Tra_Type {
-	int dig;				// ¾àÀë
-	int time;				// ºÄÊ±
-	int cost;				// »¨·Ñ
-	int fun;				// ÓĞÈ¤¶È
+	int dig;				// è·ç¦»
+	int time;				// è€—æ—¶
+	int cost;				// èŠ±è´¹
+	int fun;				// æœ‰è¶£åº¦
 }TraType;
 
-// ±ßµÄĞÅÏ¢
+// è¾¹çš„ä¿¡æ¯
 typedef struct Edge_Type {
-	// »ù±¾ĞÅÏ¢
-	int ch;					// ±íÊ¾ÊÇ·ñ´æÔÚ½»Í¨·½Ê½£¬1ÎªÓĞ£¬2Îª·ñ
-	TraType air;			// ¸Ã±ßµÄ·É»ú×÷Îª½»Í¨µÄĞÅÏ¢
-	TraType train;			// ¸Ã±ßµÄ»ğ³µ×÷Îª½»Í¨µÄĞÅÏ¢
-	TraType car;			// ¸Ã±ßµÄĞ¡³µ×÷Îª½»Í¨µÄĞÅÏ¢
-	// À©³äĞÅÏ¢
-	int anv;				// ÓÃÓÚFloyd_WarshallËã·¨ÇóÈÎÒâÁ½µã¼äµÄ×î¶ÌÂ·¾¶
+	// åŸºæœ¬ä¿¡æ¯
+	int ch;					// è¡¨ç¤ºæ˜¯å¦å­˜åœ¨äº¤é€šæ–¹å¼ï¼Œ1ä¸ºæœ‰ï¼Œ2ä¸ºå¦
+	TraType air;				// è¯¥è¾¹çš„é£æœºä½œä¸ºäº¤é€šçš„ä¿¡æ¯
+	TraType train;				// è¯¥è¾¹çš„ç«è½¦ä½œä¸ºäº¤é€šçš„ä¿¡æ¯
+	TraType car;				// è¯¥è¾¹çš„å°è½¦ä½œä¸ºäº¤é€šçš„ä¿¡æ¯
+	// æ‰©å……ä¿¡æ¯
+	int anv;				// ç”¨äºFloyd_Warshallç®—æ³•æ±‚ä»»æ„ä¸¤ç‚¹é—´çš„æœ€çŸ­è·¯å¾„
 }EdgeType;
 
-// Õ»½á¹¹
+// æ ˆç»“æ„
 typedef struct Stack_Type {
 	int dis[52];
 	int top;
 }StackType;
 
-// Â·¾¶ĞÅÏ¢
+// è·¯å¾„ä¿¡æ¯
 typedef struct BestPath_Type {
 	int best_path[55];
 	int len;
-	int adddis;			// ×îÓÅÂ·¾¢µÄÂ·³Ì
-	int addtime;		// ×îÓÅÂ·¾¢µÄºÄÊ±
-	int addmoney;		// ×îÓÅÂ·¾¢µÄ»¨·Ñ
-	int addfun;			// ×îÓÅÂ·¾¢µÄÓĞÈ¤¶È
+	int adddis;			// æœ€ä¼˜è·¯åŠ²çš„è·¯ç¨‹
+	int addtime;			// æœ€ä¼˜è·¯åŠ²çš„è€—æ—¶
+	int addmoney;			// æœ€ä¼˜è·¯åŠ²çš„èŠ±è´¹
+	int addfun;			// æœ€ä¼˜è·¯åŠ²çš„æœ‰è¶£åº¦
 }BestPathType;
 
-// ÇÅµÄÊı¾İÀàĞÍ 
+// æ¡¥çš„æ•°æ®ç±»å‹ 
 typedef struct Bridge_Type {
 	int u;
 	int v;
 }BridgeType;
 
 
-/******************** º¯ÊıÉùÃ÷ ************************/
-// Ç°ÆÚ×¼±¸
-int in();							// Ö÷½çÃæ
-void tip();							// Ê¡·İÌáÊ¾
-void ReadText();					// ¶ÁÈ¡ÎÄ¼ş
-int TheMinLong(int, int);			// Í¬Ò»Ìõ±ßµÄ½»Í¨·½Ê½ÖĞÂ·³Ì×îĞ¡µÄÄÇ¸ö
-int TheMinMoney(int, int);			// Í¬Ò»Ìõ±ßµÄ½»Í¨·½Ê½ÖĞ»¨·Ñ×îĞ¡µÄÄÇ¸ö
-void init_graph();					// ³õÊ¼»¯Í¼
-void Change_pro(int, int &, int &);	// ¸Ä±äÊ¡·İ
-void init_flag();					// ³õÊ¼»¯±ê¼ÇÊı×é
-void init_bridge();					// ³õÊ¼»¯
-bool is_all();						// ÅĞ¶Ïµ±Ç°Â·¾¶ÖĞÊÇ·ñÒÑ°üº¬Ö¸¶¨µÄk¸ö¶¥µã
-void init_Good();					// ³õÊ¼»¯×îÓÅÂ·¾¶
-void init_bestway();				// ³õÊ¼»¯×îÓÅÂÃĞĞ·½Ê½
+/******************** å‡½æ•°å£°æ˜ ************************/
+// å‰æœŸå‡†å¤‡
+int in();							// ä¸»ç•Œé¢
+void tip();							// çœä»½æç¤º
+void ReadText();						// è¯»å–æ–‡ä»¶
+int TheMinLong(int, int);					// åŒä¸€æ¡è¾¹çš„äº¤é€šæ–¹å¼ä¸­è·¯ç¨‹æœ€å°çš„é‚£ä¸ª
+int TheMinMoney(int, int);					// åŒä¸€æ¡è¾¹çš„äº¤é€šæ–¹å¼ä¸­èŠ±è´¹æœ€å°çš„é‚£ä¸ª
+void init_graph();					// åˆå§‹åŒ–å›¾
+void Change_pro(int, int &, int &);			// æ”¹å˜çœä»½
+void init_flag();					// åˆå§‹åŒ–æ ‡è®°æ•°ç»„
+void init_bridge();					// åˆå§‹åŒ–
+bool is_all();						// åˆ¤æ–­å½“å‰è·¯å¾„ä¸­æ˜¯å¦å·²åŒ…å«æŒ‡å®šçš„kä¸ªé¡¶ç‚¹
+void init_Good();					// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+void init_bestway();					// åˆå§‹åŒ–æœ€ä¼˜æ—…è¡Œæ–¹å¼
 
-// Õ»²Ù×÷
-void push(int);				// ½øÕ»
-int pop();					// ³öÕ»
+// æ ˆæ“ä½œ
+void push(int);				// è¿›æ ˆ
+int pop();				// å‡ºæ ˆ
 
-// ¹¦ÄÜº¯Êı£¬¶ÔÓ¦ÎÊÌâ1-9
-void traver();				// 1¡¢Êä³ö³ÇÊĞÊı¾İ
-void Hamilton();			// 2¡¢ÕÒÒ»Ìõ¹şÃÜ¶Ù»ØÂ·
-void Que_3();				// 3¡¢Âú×ãÌõ¼şÇÒ¾­¹ıÖ¸¶¨k¸ö¶¥µãµÄ»ØÂ·
-void Que_4();				// 4¡¢ÕÒAµ½BµÄ×î¶ÌÂ·ºÍ×îÓĞÈ¤µÄÂ·
-void Floyd_Warshall();			// 4.1¡¢Floyd_WarshallËã·¨ÇóÈÎÒâÁ½µãµÄ×îĞ¡Â·¾¶
-void traverse(int, int);		// 4.2¡¢µİ¹éÊä³öuµ½vµÄ×î¶ÌÂ·¾¶µã 
-void Que_5();				// 5¡¢Aµ½B¡¢¾­¹ık¸ö²»Í¬¶¥µã£¨¿ÉÒÔ¶àÓÚk¸ö¶¥µã£¬µ«²»ÄÜÉÙÓÚ£©¡¢ºÄÊ±²»³¬¹ıC¡¢ÓĞÈ¤¶È×î´óµÄÂ·¾¶
-void Que_6();				// 6¡¢ÓĞÏŞµÄÊ±¼ä£¨ÈçxÌì£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
-void Que_7();				// 7¡¢ÓĞÏŞµÄ¾­·Ñ£¨ÈçxÔª£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
-void Que_8();				// 8¡¢×ÛºÏ6ºÍ7µÄÏŞÖÆ£¬Çó½âÍ¬ÉÏ
-void FindBridge();			// 9¡¢ÕÒÇÅºÍ¹Ø½Úµã
+// åŠŸèƒ½å‡½æ•°ï¼Œå¯¹åº”é—®é¢˜1-9
+void traver();				// 1ã€è¾“å‡ºåŸå¸‚æ•°æ®
+void Hamilton();			// 2ã€æ‰¾ä¸€æ¡å“ˆå¯†é¡¿å›è·¯
+void Que_3();				// 3ã€æ»¡è¶³æ¡ä»¶ä¸”ç»è¿‡æŒ‡å®škä¸ªé¡¶ç‚¹çš„å›è·¯
+void Que_4();				// 4ã€æ‰¾Aåˆ°Bçš„æœ€çŸ­è·¯å’Œæœ€æœ‰è¶£çš„è·¯
+void Floyd_Warshall();				// 4.1ã€Floyd_Warshallç®—æ³•æ±‚ä»»æ„ä¸¤ç‚¹çš„æœ€å°è·¯å¾„
+void traverse(int, int);			// 4.2ã€é€’å½’è¾“å‡ºuåˆ°vçš„æœ€çŸ­è·¯å¾„ç‚¹ 
+void Que_5();				// 5ã€Aåˆ°Bã€ç»è¿‡kä¸ªä¸åŒé¡¶ç‚¹ï¼ˆå¯ä»¥å¤šäºkä¸ªé¡¶ç‚¹ï¼Œä½†ä¸èƒ½å°‘äºï¼‰ã€è€—æ—¶ä¸è¶…è¿‡Cã€æœ‰è¶£åº¦æœ€å¤§çš„è·¯å¾„
+void Que_6();				// 6ã€æœ‰é™çš„æ—¶é—´ï¼ˆå¦‚xå¤©ï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
+void Que_7();				// 7ã€æœ‰é™çš„ç»è´¹ï¼ˆå¦‚xå…ƒï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
+void Que_8();				// 8ã€ç»¼åˆ6å’Œ7çš„é™åˆ¶ï¼Œæ±‚è§£åŒä¸Š
+void FindBridge();			// 9ã€æ‰¾æ¡¥å’Œå…³èŠ‚ç‚¹
 
 
 // DFS
-void DFS_Hamilton(int, int, int, int, int);						//	¹şÃÜ¶Ù
-void DFS_MostFun(int, int, int, int, int, int);					//	ÓĞÏŞ¾­·ÑÄÚ×îÓĞÈ¤µÄÂ·
-void DFS_fun(int, int, int, int, int);							//	Aµ½B×îÓĞÈ¤Â·¾¶
-void DFS_K_MostFun(int, int, int, int, int, int, int);			//	Aµ½B¾­¹ık¸ö¶¥µãµÄ×îÓĞÈ¤Â·¾¶
-void DFS_Time_MostFun(int, int, int, int, int, int);			//	ÓĞÏŞÊ±¼äÄÚ¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
-void DFS_Money_MostFun(int, int, int, int, int, int);			//	ÓĞÏŞ¾­·ÑÄÚ¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
-void DFS_TimeMoney_MostFun(int, int, int, int, int, int, int);	//	DFS×ÛºÏ6¡¢7Ìõ¼ş£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
-int Dfs_bridge(int, int);										//	ÕÒÇÅÓë¸îµã
+void DFS_Hamilton(int, int, int, int, int);				// å“ˆå¯†é¡¿
+void DFS_MostFun(int, int, int, int, int, int);				// æœ‰é™ç»è´¹å†…æœ€æœ‰è¶£çš„è·¯
+void DFS_fun(int, int, int, int, int);					// Aåˆ°Bæœ€æœ‰è¶£è·¯å¾„
+void DFS_K_MostFun(int, int, int, int, int, int, int);			// Aåˆ°Bç»è¿‡kä¸ªé¡¶ç‚¹çš„æœ€æœ‰è¶£è·¯å¾„
+void DFS_Time_MostFun(int, int, int, int, int, int);			// æœ‰é™æ—¶é—´å†…é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
+void DFS_Money_MostFun(int, int, int, int, int, int);			// æœ‰é™ç»è´¹å†…é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
+void DFS_TimeMoney_MostFun(int, int, int, int, int, int, int);		// DFSç»¼åˆ6ã€7æ¡ä»¶ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
+int Dfs_bridge(int, int);						// æ‰¾æ¡¥ä¸å‰²ç‚¹
 
 
 
-/******************** È«¾Ö±äÁ¿ ************************/
-int n, e;					// ×Ü³ÇÊĞ¸öÊıºÍ±ßÊı
-CityType city[55];			// ³ÇÊĞ£¬¹²ÓĞ51¸ö
-EdgeType graph[55][55];		// ´æ´¢±ßµÄĞÅÏ¢
-StackType S;				// Õ»
-int flag[52];				// ±ê¼ÇÊı×é
-int level;					// ¼ÇÂ¼µİ¹éÉî¶È
-int g[55][55];				// ÁÚ½Ó±íµÄĞÎÊ½
-BestPathType Good;			// ×îÓÅÂ·¾¶
-int path[55][55];			// ´æ·ÅÃ¿¸ö¶¥µãµ½ÁíÍâÒ»¸ö¶¥µãµÄ×î¶ÌÂ·¾¶
-int addfun;					// µ±Ç°Â·¾¶ÓĞÈ¤¶ÈÖ®ºÍ
-int addtime;				// µ±Ç°Â·¾¶ºÄÊ±Ö®ºÍ
-int goway[55];				// µ±Ç°ÂÃĞĞ·½Ê½£¨·Ç×îÓÅ£©
-int best_way[55];			// ×îÓÅÂÃĞĞ·½Ê½
+/******************** å…¨å±€å˜é‡ ************************/
+int n, e;				// æ€»åŸå¸‚ä¸ªæ•°å’Œè¾¹æ•°
+CityType city[55];			// åŸå¸‚ï¼Œå…±æœ‰51ä¸ª
+EdgeType graph[55][55];			// å­˜å‚¨è¾¹çš„ä¿¡æ¯
+StackType S;				// æ ˆ
+int flag[52];				// æ ‡è®°æ•°ç»„
+int level;				// è®°å½•é€’å½’æ·±åº¦
+int g[55][55];				// é‚»æ¥è¡¨çš„å½¢å¼
+BestPathType Good;			// æœ€ä¼˜è·¯å¾„
+int path[55][55];			// å­˜æ”¾æ¯ä¸ªé¡¶ç‚¹åˆ°å¦å¤–ä¸€ä¸ªé¡¶ç‚¹çš„æœ€çŸ­è·¯å¾„
+int addfun;				// å½“å‰è·¯å¾„æœ‰è¶£åº¦ä¹‹å’Œ
+int addtime;				// å½“å‰è·¯å¾„è€—æ—¶ä¹‹å’Œ
+int goway[55];				// å½“å‰æ—…è¡Œæ–¹å¼ï¼ˆéæœ€ä¼˜ï¼‰
+int best_way[55];			// æœ€ä¼˜æ—…è¡Œæ–¹å¼
 
 
 int main()
@@ -141,9 +136,9 @@ int main()
 		case 8:	Que_8();	break;
 		case 9:	FindBridge();	break;
 		case 10:	
-			printf("\n\nÒÑ°²È«ÍË³öÏµÍ³£¡\a\n");	break;
+			printf("\n\nå·²å®‰å…¨é€€å‡ºç³»ç»Ÿï¼\a\n");	break;
 		default:	
-			printf("\n\n´íÎóµÄ²Ù×÷Ö¸Áî£¡\n\a\a\n");
+			printf("\n\né”™è¯¯çš„æ“ä½œæŒ‡ä»¤ï¼\n\a\a\n");
 		}
 
 	} while (choice != 10);
@@ -151,59 +146,59 @@ int main()
 	return 0;
 }
 
-/******************** ×¼±¸¹¤×÷ ************************/
-// Ö÷½çÃæ
+/******************** å‡†å¤‡å·¥ä½œ ************************/
+// ä¸»ç•Œé¢
 int in()
 {
 	int choice;
 
 	for (int i = 0; i < 115; i++)
-		printf("©¥");
-	printf("\n\t1¡ª¡ªÉú³ÉÍ¼µÄÊı¾İ\n");
-	printf("\t2¡ª¡ªÕÒÒ»ÌõHAMILTON»ØÂ·\n");
-	printf("\t3¡ª¡ªÕÒÒ»Ìõ¾­¹ıÖ¸¶¨µÄk¸ö¶¥µãµÄ»ØÂ·£¬Ê¹ÓÃÒ»ÖÖ½»Í¨·½Ê½£¬Ê¹µÃ»ØÂ··ÑÓÃ²»³¬¹ıC¡¢ÓĞÈ¤¶È×î´ó\n");
-	printf("\t4¡ª¡ªÕÒÒ»Ìõ´Ó¶¥µãAµ½¶¥µãBµÄ×î¶ÌÂ·£¬ÕÒÒ»ÌõAµ½B×îÓĞÈ¤µÄÂ·\n");
-	printf("\t5¡ª¡ªÕÒÒ»Ìõ´Ó¶¥µãAµ½¶¥µãB¡¢¾­¹ık¸ö²»Í¬¶¥µã£¨¿ÉÒÔ¶àÓÚk¸ö¶¥µã£¬µ«²»ÄÜÉÙÓÚ£©¡¢ºÄÊ±²»³¬¹ıC¡¢ÓĞÈ¤¶È×î´óµÄÂ·¾¶\n");
-	printf("\t6¡ª¡ªÔÚÓĞÏŞµÄÊ±¼ä£¨ÈçxÌì£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤£¨·ç¾°×îÃÀ/×îºÃÍæ£©µÄÂÃĞĞ·½Ê½¡£\n");
-	printf("\t7¡ª¡ªÔÚÓĞÏŞµÄ¾­·Ñ£¨ÈçxÔª£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤£¨·ç¾°×îÃÀ/×îºÃÍæ£©µÄÂÃĞĞ·½Ê½¡£\n");
-	printf("\t8¡ª¡ª×ÛºÏ6ºÍ7µÄÏŞÖÆ£¬Çó½âÍ¬ÉÏ\n");
-	printf("\t9¡ª¡ªÑ°ÕÒ¡°¹Ø½Úµã¡±ºÍ¡°ÇÅ¡±\n");
-	printf("\t10¡ª¡ª½áÊø³ÌĞò\n");
+		printf("â”");
+	printf("\n\t1â€”â€”ç”Ÿæˆå›¾çš„æ•°æ®\n");
+	printf("\t2â€”â€”æ‰¾ä¸€æ¡HAMILTONå›è·¯\n");
+	printf("\t3â€”â€”æ‰¾ä¸€æ¡ç»è¿‡æŒ‡å®šçš„kä¸ªé¡¶ç‚¹çš„å›è·¯ï¼Œä½¿ç”¨ä¸€ç§äº¤é€šæ–¹å¼ï¼Œä½¿å¾—å›è·¯è´¹ç”¨ä¸è¶…è¿‡Cã€æœ‰è¶£åº¦æœ€å¤§\n");
+	printf("\t4â€”â€”æ‰¾ä¸€æ¡ä»é¡¶ç‚¹Aåˆ°é¡¶ç‚¹Bçš„æœ€çŸ­è·¯ï¼Œæ‰¾ä¸€æ¡Aåˆ°Bæœ€æœ‰è¶£çš„è·¯\n");
+	printf("\t5â€”â€”æ‰¾ä¸€æ¡ä»é¡¶ç‚¹Aåˆ°é¡¶ç‚¹Bã€ç»è¿‡kä¸ªä¸åŒé¡¶ç‚¹ï¼ˆå¯ä»¥å¤šäºkä¸ªé¡¶ç‚¹ï¼Œä½†ä¸èƒ½å°‘äºï¼‰ã€è€—æ—¶ä¸è¶…è¿‡Cã€æœ‰è¶£åº¦æœ€å¤§çš„è·¯å¾„\n");
+	printf("\t6â€”â€”åœ¨æœ‰é™çš„æ—¶é—´ï¼ˆå¦‚xå¤©ï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£ï¼ˆé£æ™¯æœ€ç¾/æœ€å¥½ç©ï¼‰çš„æ—…è¡Œæ–¹å¼ã€‚\n");
+	printf("\t7â€”â€”åœ¨æœ‰é™çš„ç»è´¹ï¼ˆå¦‚xå…ƒï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£ï¼ˆé£æ™¯æœ€ç¾/æœ€å¥½ç©ï¼‰çš„æ—…è¡Œæ–¹å¼ã€‚\n");
+	printf("\t8â€”â€”ç»¼åˆ6å’Œ7çš„é™åˆ¶ï¼Œæ±‚è§£åŒä¸Š\n");
+	printf("\t9â€”â€”å¯»æ‰¾â€œå…³èŠ‚ç‚¹â€å’Œâ€œæ¡¥â€\n");
+	printf("\t10â€”â€”ç»“æŸç¨‹åº\n");
 	for (int i = 0; i < 115; i++)
-		printf("©¥");
-	printf("\nÇëÊäÈë²Ù×÷Ñ¡Ïî£º");
+		printf("â”");
+	printf("\nè¯·è¾“å…¥æ“ä½œé€‰é¡¹ï¼š");
 	scanf("%d", &choice);
 
 	return choice;
 }
 
-// Ê¡·İÌáÊ¾
+// çœä»½æç¤º
 void tip()
 {
 	for (int i = 0; i < 35; i++)
-		printf("©¥");
-	printf("\n\t1¡¢¹ã¶«Ê¡£¨1-23£©\n");
-	printf("\t2¡¢¹ãÎ÷Ê¡£¨24-37£©\n");
-	printf("\t3¡¢ºşÄÏÊ¡£¨38-51£©\n");
+		printf("â”");
+	printf("\n\t1ã€å¹¿ä¸œçœï¼ˆ1-23ï¼‰\n");
+	printf("\t2ã€å¹¿è¥¿çœï¼ˆ24-37ï¼‰\n");
+	printf("\t3ã€æ¹–å—çœï¼ˆ38-51ï¼‰\n");
 	for (int i = 0; i < 35; i++)
-		printf("©¥");
-	printf("\nÇëÊäÈëÑ¡Ïî£º");
+		printf("â”");
+	printf("\nè¯·è¾“å…¥é€‰é¡¹ï¼š");
 }
 
-// ¶ÁÈ¡ÎÄ¼ş
+// è¯»å–æ–‡ä»¶
 void ReadText()
 {
-	FILE *fp = fopen("³ÇÊĞÊı¾İ.txt", "r");
+	FILE *fp = fopen("åŸå¸‚æ•°æ®.txt", "r");
 	int u, v, op;
 
-	printf("ÕıÔÚ´ò¿ªÎÄ¼ş...\n");
+	printf("æ­£åœ¨æ‰“å¼€æ–‡ä»¶...\n");
 	if (fp == NULL)
 	{
-		printf("ÎÄ¼ş´ò¿ªÊ§°Ü£¡\nÇë¼ì²éÎÄµµÊÇ·ñ´æ·ÅÔÚÕıÈ·µÄÂ·¾¶!\n");
+		printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼\nè¯·æ£€æŸ¥æ–‡æ¡£æ˜¯å¦å­˜æ”¾åœ¨æ­£ç¡®çš„è·¯å¾„!\n");
 		exit(0);
 	}
-	printf("ÎÄ¼ş´ò¿ª³É¹¦!\n");
-	printf("¿ªÊ¼¶ÁÈ¡ÎÄ¼ş...\n");
+	printf("æ–‡ä»¶æ‰“å¼€æˆåŠŸ!\n");
+	printf("å¼€å§‹è¯»å–æ–‡ä»¶...\n");
 	fscanf(fp, "%d", &n);
 	for (int i = 1; i <= n; i++)
 		fscanf(fp, "%d%s%s%d", &city[i].id, city[i].name, city[i].from, &city[i].view);
@@ -213,9 +208,9 @@ void ReadText()
 		fscanf(fp, "%d%d%d", &u, &v, &op);
 		graph[u][v].ch = graph[v][u].ch = 1;
 
-		/* ¹¹ÔìÁÚ½Ó±í */
+		/* æ„é€ é‚»æ¥è¡¨ */
 		bool ch = true;
-		// ÅĞ¶ÏÊÇ·ñÖØ¸´
+		// åˆ¤æ–­æ˜¯å¦é‡å¤
 		for (int t = 0; t <= g[u][0]; t++)
 		{
 			if (v == g[u][t])
@@ -223,9 +218,9 @@ void ReadText()
 		}
 		if (ch == true)
 		{
-			g[u][0]++;		// ÁÚ½Óµã+1
+			g[u][0]++;		// é‚»æ¥ç‚¹+1
 			g[u][g[u][0]] = v;
-			g[v][0]++;		// ÁÚ½Óµã+1
+			g[v][0]++;		// é‚»æ¥ç‚¹+1
 			g[v][g[v][0]] = u;
 		}
 
@@ -258,12 +253,12 @@ void ReadText()
 		}
 	}
 
-	printf("ÎÄ¼ş¶ÁÈ¡³É¹¦!\n\n");
+	printf("æ–‡ä»¶è¯»å–æˆåŠŸ!\n\n");
 
 	fclose(fp);
 }
 
-// Í¬Ò»Ìõ±ßµÄ½»Í¨·½Ê½ÖĞÂ·³Ì×îĞ¡µÄÄÇ¸ö
+// åŒä¸€æ¡è¾¹çš„äº¤é€šæ–¹å¼ä¸­è·¯ç¨‹æœ€å°çš„é‚£ä¸ª
 int TheMinLong(int u, int v)
 {
 	int min;
@@ -293,7 +288,7 @@ int TheMinLong(int u, int v)
 	return min;
 }
 
-// Í¬Ò»Ìõ±ßµÄ½»Í¨·½Ê½ÖĞÊ±¼ä×îĞ¡µÄÄÇ¸ö
+// åŒä¸€æ¡è¾¹çš„äº¤é€šæ–¹å¼ä¸­æ—¶é—´æœ€å°çš„é‚£ä¸ª
 int TheMinMoney(int u, int v)
 {
 	int min;
@@ -323,7 +318,7 @@ int TheMinMoney(int u, int v)
 	return min;
 }
 
-// ³õÊ¼»¯Í¼
+// åˆå§‹åŒ–å›¾
 void init_graph()
 {
 	for (int i = 0; i < 55; i++)
@@ -331,17 +326,17 @@ void init_graph()
 		for (int j = 0; j < 55; j++)
 		{
 			graph[i][j].ch = 0;
-			// ·É»ú
+			// é£æœº
 			graph[i][j].air.cost = 0;
 			graph[i][j].air.dig = 0;
 			graph[i][j].air.fun = 0;
 			graph[i][j].air.time = 0;
-			// »ğ³µ
+			// ç«è½¦
 			graph[i][j].train.cost = 0;
 			graph[i][j].train.dig = 0;
 			graph[i][j].train.fun = 0;
 			graph[i][j].train.time = 0;
-			// Ğ¡³µ
+			// å°è½¦
 			graph[i][j].car.cost = 0;
 			graph[i][j].car.dig = 0;
 			graph[i][j].car.fun = 0;
@@ -349,15 +344,15 @@ void init_graph()
 			graph[i][j].anv = 0;
 
 			if (i != j)
-				graph[i][j].anv = 99999;	// ±íÊ¾Á½¸öÕ¾µãÖ®¼äÃ»ÓĞÁ¬½Ó
+				graph[i][j].anv = 99999;	// è¡¨ç¤ºä¸¤ä¸ªç«™ç‚¹ä¹‹é—´æ²¡æœ‰è¿æ¥
 			else
 				graph[i][j].anv = 0;
-			path[i][j] = -1;				// -1±íÊ¾ÎŞĞè¾­¹ıÖĞ¼äµã 
+			path[i][j] = -1;				// -1è¡¨ç¤ºæ— éœ€ç»è¿‡ä¸­é—´ç‚¹ 
 		}
 	}
 }
 
-// ¸Ä±äÊ¡·İ
+// æ”¹å˜çœä»½
 void Change_pro(int op, int & xia, int & shang)
 {
 	switch (op)
@@ -371,19 +366,19 @@ void Change_pro(int op, int & xia, int & shang)
 	}
 }
 
-// ³õÊ¼»¯±ê¼ÇÊı×é
+// åˆå§‹åŒ–æ ‡è®°æ•°ç»„
 void init_flag()
 {
 	for (int i = 0; i < 52; i++)
 		flag[i] = 0;
 }
 
-// ³õÊ¼»¯ÕÒÇÅĞèÒªÓÃµ½µÄ½á¹¹
-int dfs_clock;					// dfsÊ±¼ä´Á
-int pre[55], low[55];			// preÊÇ¼ÇÂ¼Ê±¼ä´ÁµÄÊı×é£¬low[u]±íÊ¾uÒÔ¼°uµÄËùÓĞ×ÓËïÖĞÄÜÁ¬»Ø×æÏÈÖĞ
-bool iscut[55];					// ¶¥µãiÊÇ·ñÎª¸îµã
+// åˆå§‹åŒ–æ‰¾æ¡¥éœ€è¦ç”¨åˆ°çš„ç»“æ„
+int dfs_clock;					// dfsæ—¶é—´æˆ³
+int pre[55], low[55];			// preæ˜¯è®°å½•æ—¶é—´æˆ³çš„æ•°ç»„ï¼Œlow[u]è¡¨ç¤ºuä»¥åŠuçš„æ‰€æœ‰å­å­™ä¸­èƒ½è¿å›ç¥–å…ˆä¸­
+bool iscut[55];					// é¡¶ç‚¹iæ˜¯å¦ä¸ºå‰²ç‚¹
 int len_bridge;
-BridgeType bridge[55];			// ´æ´¢Í¼ÖĞµÄÇÅ
+BridgeType bridge[55];			// å­˜å‚¨å›¾ä¸­çš„æ¡¥
 void init_bridge()
 {
 	dfs_clock = 0;
@@ -402,8 +397,8 @@ void init_bridge()
 	len_bridge = 0;
 }
 
-// ÅĞ¶ÏÂ·¾¶ÖĞÊÇ·ñÒÑ°üº¬Ö¸¶¨µÄk¸ö¶¥µã
-int way[30];		// µÚ0Î»´æ·Åk¸ö¶¥µã	
+// åˆ¤æ–­è·¯å¾„ä¸­æ˜¯å¦å·²åŒ…å«æŒ‡å®šçš„kä¸ªé¡¶ç‚¹
+int way[30];		// ç¬¬0ä½å­˜æ”¾kä¸ªé¡¶ç‚¹	
 bool is_all()
 {
 	int num = 0;
@@ -421,7 +416,7 @@ bool is_all()
 		return false;
 }
 
-// ³õÊ¼»¯×îÓÅÂ·¾¶
+// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
 void init_Good()
 {
 	Good.adddis = 0;
@@ -431,7 +426,7 @@ void init_Good()
 	Good.len = 0;
 }
 
-// ³õÊ¼»¯×îÓÅÂÃĞĞ·½Ê½
+// åˆå§‹åŒ–æœ€ä¼˜æ—…è¡Œæ–¹å¼
 void init_bestway()
 {
 	for (int i = 0; i < 55; i++)
@@ -442,49 +437,49 @@ void init_bestway()
 }
 
 
-/********************  Õ»²Ù×÷  ************************/
-// ½øÕ»
+/********************  æ ˆæ“ä½œ  ************************/
+// è¿›æ ˆ
 void push(int ch)
 {
 	S.top++;
 	S.dis[S.top] = ch;
 }
 
-// ³öÕ»
+// å‡ºæ ˆ
 int pop()
 {
 	return S.dis[S.top--];
 }
 
 
-/******************** ¹¦ÄÜº¯Êı ************************/
-//	1¡¢Êä³ö³ÇÊĞÊı¾İ
+/******************** åŠŸèƒ½å‡½æ•° ************************/
+//	1ã€è¾“å‡ºåŸå¸‚æ•°æ®
 void traver()
 {
 	printf("\n");
 	printf("------------------------------------------------------\n");
-	printf("³ÇÊĞid\t³ÇÊĞÃû³Æ\tËùÊôÊ¡·İ\tÓĞÈ¤¶È\n");
+	printf("åŸå¸‚id\tåŸå¸‚åç§°\tæ‰€å±çœä»½\tæœ‰è¶£åº¦\n");
 	printf("------------------------------------------------------\n");
 	for (int i = 1; i <= n; i++)
 		printf("%4d\t%s\t\t%s\t\t%4d\n", city[i].id, city[i].name, city[i].from, city[i].view);
 	printf("------------------------------------------------------------------------------------------------------------------\n");
-	printf("³ö·¢±àºÅ\tÄ¿±ê±àºÅ\t½»Í¨·½Ê½\tÂ·³Ì(km)\tºÄÊ±(h)\t\t·ÑÓÃ(Ôª)\tÓĞÈ¤¶È\n");
+	printf("å‡ºå‘ç¼–å·\tç›®æ ‡ç¼–å·\täº¤é€šæ–¹å¼\tè·¯ç¨‹(km)\tè€—æ—¶(h)\t\tè´¹ç”¨(å…ƒ)\tæœ‰è¶£åº¦\n");
 	printf("------------------------------------------------------------------------------------------------------------------\n");
 	for (int i = 1; i <= n; i++)
 	{
 		for (int k = 1; k <= n; k++)
 		{
 			if (graph[i][k].air.dig != 0)
-				printf("%4d\t\t%4d\t\t  ·É»ú\t\t%4d\t\t%.2lf\t\t%4d\t\t%4d\n", i, k, graph[i][k].air.dig, (double)graph[i][k].air.time/10, graph[i][k].air.cost, graph[i][k].air.fun);
+				printf("%4d\t\t%4d\t\t  é£æœº\t\t%4d\t\t%.2lf\t\t%4d\t\t%4d\n", i, k, graph[i][k].air.dig, (double)graph[i][k].air.time/10, graph[i][k].air.cost, graph[i][k].air.fun);
 			if (graph[i][k].train.dig != 0)
-				printf("%4d\t\t%4d\t\t  »ğ³µ\t\t%4d\t\t%.2lf\t\t%4d\t\t%4d\n", i, k, graph[i][k].train.dig, (double)graph[i][k].train.time/10, graph[i][k].train.cost, graph[i][k].train.fun);
+				printf("%4d\t\t%4d\t\t  ç«è½¦\t\t%4d\t\t%.2lf\t\t%4d\t\t%4d\n", i, k, graph[i][k].train.dig, (double)graph[i][k].train.time/10, graph[i][k].train.cost, graph[i][k].train.fun);
 			if (graph[i][k].car.dig != 0)
-				printf("%4d\t\t%4d\t\t  ¼İ³µ\t\t%4d\t\t%.2lf\t\t%4d\t\t%4d\n", i, k, graph[i][k].car.dig, (double)graph[i][k].car.time/10, graph[i][k].car.cost, graph[i][k].car.fun);
+				printf("%4d\t\t%4d\t\t  é©¾è½¦\t\t%4d\t\t%.2lf\t\t%4d\t\t%4d\n", i, k, graph[i][k].car.dig, (double)graph[i][k].car.time/10, graph[i][k].car.cost, graph[i][k].car.fun);
 		}
 	}
 }
 
-//	2¡¢ÕÒÒ»Ìõ¹şÃÜ¶Ù»ØÂ·
+//	2ã€æ‰¾ä¸€æ¡å“ˆå¯†é¡¿å›è·¯
 int fl;
 void Hamilton()
 {
@@ -492,24 +487,24 @@ void Hamilton()
 	int low, hi, citynum;
 	int start;
 
-	level = 0;			// Â·¾¶Êı×é³õÊ¼³¤¶ÈÎª0
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥
+	level = 0;			// è·¯å¾„æ•°ç»„åˆå§‹é•¿åº¦ä¸º0
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶
 	fl = 0;
 	tip();
 	init_flag();
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈë³ö·¢³ÇÊĞ£¨%d-%d£©£º", low, hi);
+	printf("è¯·è¾“å…¥å‡ºå‘åŸå¸‚ï¼ˆ%d-%dï¼‰ï¼š", low, hi);
 	scanf("%d", &start);
 	push(start);
 	flag[start] = 1;
 	DFS_Hamilton(start, start, low, hi, citynum);
 	if (fl == 0)
-		printf("ÒÔ%dºÅ³ÇÊĞ³ö·¢£¬¸ÃÊ¡·İÃ»ÓĞ¹şÃÜ¶Ù»ØÂ·\n\n\a", start);
+		printf("ä»¥%då·åŸå¸‚å‡ºå‘ï¼Œè¯¥çœä»½æ²¡æœ‰å“ˆå¯†é¡¿å›è·¯\n\n\a", start);
 }
 
-//	3¡¢Âú×ãÌõ¼şÇÒ¾­¹ıÖ¸¶¨k¸ö¶¥µãµÄ»ØÂ·
+//	3ã€æ»¡è¶³æ¡ä»¶ä¸”ç»è¿‡æŒ‡å®škä¸ªé¡¶ç‚¹çš„å›è·¯
 int add_fun;
 int add_money;
 int min_money;
@@ -520,79 +515,79 @@ void Que_3()
 	int start;
 	int traff;
 
-	init_Good();		// ³õÊ¼»¯×îÓÅÂ·¾¶
-	level = 0;			// µİ¹éÉî¶È
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥£¬0ÎªÕ»µ×
+	init_Good();		// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+	level = 0;			// é€’å½’æ·±åº¦
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶ï¼Œ0ä¸ºæ ˆåº•
 	add_fun = add_money = 0;
 	tip();
 	init_flag();
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈëĞèÒª¾­¹ıµÄ¶¥µãµÄ¸öÊı£º");
+	printf("è¯·è¾“å…¥éœ€è¦ç»è¿‡çš„é¡¶ç‚¹çš„ä¸ªæ•°ï¼š");
 	scanf("%d", &way[0]);
-	printf("ÇëÒÀ´ÎÊäÈë %d ¸ö¶¥µã£¨%d - %d£©£º", way[0], low, hi);
+	printf("è¯·ä¾æ¬¡è¾“å…¥ %d ä¸ªé¡¶ç‚¹ï¼ˆ%d - %dï¼‰ï¼š", way[0], low, hi);
 	for (int i = 1; i <= way[0]; i++)
 		scanf("%d", &way[i]);
-	printf("ÇëÊäÈëÔ¤Ëã£¨Ôª£©£º");
+	printf("è¯·è¾“å…¥é¢„ç®—ï¼ˆå…ƒï¼‰ï¼š");
 	scanf("%d", &min_money);
-	printf("ÇëÊäÈë³ö·¢³ÇÊĞµÄ±àºÅ£¨%d - %d£©£º", low, hi);
+	printf("è¯·è¾“å…¥å‡ºå‘åŸå¸‚çš„ç¼–å·ï¼ˆ%d - %dï¼‰ï¼š", low, hi);
 	scanf("%d", &start);
-	printf("ÇëÑ¡Ôñ½»Í¨·½Ê½£¨1--·É»ú£¬2--»ğ³µ£¬3--¼İ³µ£©£º");
+	printf("è¯·é€‰æ‹©äº¤é€šæ–¹å¼ï¼ˆ1--é£æœºï¼Œ2--ç«è½¦ï¼Œ3--é©¾è½¦ï¼‰ï¼š");
 	scanf("%d", &traff);
 	push(start);
 	flag[start] = 1;
 
 	DFS_MostFun(start, start, low, hi, citynum, traff);
 
-	// ´æÔÚ×îÓÅÂ·¾¶
+	// å­˜åœ¨æœ€ä¼˜è·¯å¾„
 	if (Good.len != 0)
 	{
-		printf("\n³É¹¦ÕÒµ½×îÓÅÂ·¾¶£¡\n\n");
+		printf("\næˆåŠŸæ‰¾åˆ°æœ€ä¼˜è·¯å¾„ï¼\n\n");
 		for (int i = 1; i <= Good.len; i++)
 			printf("%d ->", Good.best_path[i]);
 		printf("%d\n\n", start);
-		printf("¸ÃÂ·¾¶Ô¤Ëã£¨Ôª£©£º%d\n", Good.addmoney);
-		printf("¸ÃÂ·¾¶ÓĞÈ¤¶È£º%d\n\n", Good.addfun);
+		printf("è¯¥è·¯å¾„é¢„ç®—ï¼ˆå…ƒï¼‰ï¼š%d\n", Good.addmoney);
+		printf("è¯¥è·¯å¾„æœ‰è¶£åº¦ï¼š%d\n\n", Good.addfun);
 	}
 	else
-		printf("\nÃ»ÓĞÂú×ãÌõ¼şµÄÂ·¾¶£¡\n\n");
+		printf("\næ²¡æœ‰æ»¡è¶³æ¡ä»¶çš„è·¯å¾„ï¼\n\n");
 
 }
 
-//	4¡¢ÕÒAµ½BµÄ×î¶ÌÂ·ºÍ×îÓĞÈ¤µÄÂ·
+//	4ã€æ‰¾Aåˆ°Bçš„æœ€çŸ­è·¯å’Œæœ€æœ‰è¶£çš„è·¯
 void Que_4()
 {
-	int A, B;			// ¶¥µãAÎª³ö·¢µã£¬BÎªÄ¿±êµã
+	int A, B;			// é¡¶ç‚¹Aä¸ºå‡ºå‘ç‚¹ï¼ŒBä¸ºç›®æ ‡ç‚¹
 	int op;
 	int low, hi, citynum;
 
-	init_Good();		// ³õÊ¼»¯×îÓÅÂ·¾¶
-	level = 0;			// µİ¹éÉî¶È
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥£¬0ÎªÕ»µ×
+	init_Good();		// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+	level = 0;			// é€’å½’æ·±åº¦
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶ï¼Œ0ä¸ºæ ˆåº•
 	addfun = 0;
 	tip();
 	init_flag();
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈë³ö·¢µã£º");
+	printf("è¯·è¾“å…¥å‡ºå‘ç‚¹ï¼š");
 	scanf("%d", &A);
-	printf("ÇëÊäÈëÄ¿±êµã£º");
+	printf("è¯·è¾“å…¥ç›®æ ‡ç‚¹ï¼š");
 	scanf("%d", &B);
 	
-	Floyd_Warshall();			// Çó×î¶ÌÂ·¾¶
+	Floyd_Warshall();			// æ±‚æœ€çŸ­è·¯å¾„
 	if (graph[A][B].anv == 99999)
 	{
-		printf("\n%dÎŞ·¨µ½´ï%d£¡\a\n\n", A, B);
+		printf("\n%dæ— æ³•åˆ°è¾¾%dï¼\a\n\n", A, B);
 	}
-	// Á½µã¿É´ï£¬Êä³öÁ½µãÖ®¼äµÄ×î¶ÌÂ·³ÌÒÔ¼°¾­¹ıµÄ³ÇÊĞ 
+	// ä¸¤ç‚¹å¯è¾¾ï¼Œè¾“å‡ºä¸¤ç‚¹ä¹‹é—´çš„æœ€çŸ­è·¯ç¨‹ä»¥åŠç»è¿‡çš„åŸå¸‚ 
 	else
 	{
-		printf("\n%dµ½´ï%dµÄ×î¶ÌÂ·³ÌÎª %d km\n\n", A, B, graph[A][B].anv);		// Êä³öÁ½¸ö³ÇÊĞµÄ×î¶ÌÂ·³Ì 
-		printf("¾­¹ıµÄ³ÇÊĞ±àºÅÈçÏÂ£º\n\n\t");
-		traverse(A, B);															// Êä³öÁ½µãµÄ×î¶ÌÂ·¾¶Ö®¼äµÄÕ¾µã
-		printf("%d\n", B);														// Êä³öÖÕµã
+		printf("\n%dåˆ°è¾¾%dçš„æœ€çŸ­è·¯ç¨‹ä¸º %d km\n\n", A, B, graph[A][B].anv);		// è¾“å‡ºä¸¤ä¸ªåŸå¸‚çš„æœ€çŸ­è·¯ç¨‹ 
+		printf("ç»è¿‡çš„åŸå¸‚ç¼–å·å¦‚ä¸‹ï¼š\n\n\t");
+		traverse(A, B);															// è¾“å‡ºä¸¤ç‚¹çš„æœ€çŸ­è·¯å¾„ä¹‹é—´çš„ç«™ç‚¹
+		printf("%d\n", B);														// è¾“å‡ºç»ˆç‚¹
 		printf("\n");
 	}
 
@@ -601,64 +596,64 @@ void Que_4()
 
 	DFS_fun(A, B, low, hi, citynum);
 
-	// ´æÔÚ×îÓĞÈ¤µÄÂ·¾¶
+	// å­˜åœ¨æœ€æœ‰è¶£çš„è·¯å¾„
 	if (Good.len != 0)
 	{
-		printf("\n³É¹¦ÕÒµ½×îÓĞÈ¤µÄÂ·¾¶£¡\n\n\t");
+		printf("\næˆåŠŸæ‰¾åˆ°æœ€æœ‰è¶£çš„è·¯å¾„ï¼\n\n\t");
 		for (int i = 1; i < Good.len; i++)
 			printf("%d ->", Good.best_path[i]);
 		printf("%d\n\n", Good.best_path[Good.len]);
-		printf("¸ÃÂ·¾¶ÓĞÈ¤¶ÈÎª£º%d\n\n", Good.addfun);
+		printf("è¯¥è·¯å¾„æœ‰è¶£åº¦ä¸ºï¼š%d\n\n", Good.addfun);
 	}
 	else
-		printf("\nÃ»ÓĞÂú×ãÌõ¼şµÄÂ·¾¶£¡\n\n");
+		printf("\næ²¡æœ‰æ»¡è¶³æ¡ä»¶çš„è·¯å¾„ï¼\n\n");
 }
 
-//	Floyd_WarshallËã·¨ÇóÈÎÒâÁ½µãµÄ×îĞ¡Â·¾¶
+//	Floyd_Warshallç®—æ³•æ±‚ä»»æ„ä¸¤ç‚¹çš„æœ€å°è·¯å¾„
 void Floyd_Warshall()
 {
-	int i, j, k;		// ÖĞ¼ä±äÁ¿ 
+	int i, j, k;		// ä¸­é—´å˜é‡ 
 
-	//  Floyd_WarshallºËĞÄËã·¨ 
+	//  Floyd_Warshallæ ¸å¿ƒç®—æ³• 
 	for (k = 1; k <= 51; k++)
 		for (i = 1; i <= 51; i++)
 			for (j = 1; j <= 51; j++)
 			{
-				// ·¢ÏÖÁË¸ü¼ÓĞ¡µÄÂ·¾¶ 
+				// å‘ç°äº†æ›´åŠ å°çš„è·¯å¾„ 
 				if (graph[i][j].anv > graph[i][k].anv + graph[k][j].anv)
 				{
-					graph[i][j].anv = graph[i][k].anv + graph[k][j].anv;		// ¸üĞÂÂ·¾¶ 
-					path[i][j] = k;			// Ìí¼ÓÖĞ¼äÕ¾µã
+					graph[i][j].anv = graph[i][k].anv + graph[k][j].anv;		// æ›´æ–°è·¯å¾„ 
+					path[i][j] = k;			// æ·»åŠ ä¸­é—´ç«™ç‚¹
 				}
 			}
 }
 
-//	µİ¹éÊä³öuµ½vµÄ×î¶ÌÂ·¾¶µã 
+//	é€’å½’è¾“å‡ºuåˆ°vçš„æœ€çŸ­è·¯å¾„ç‚¹ 
 void traverse(int u, int v)
 {
-	// µİ¹éÖÕµã
+	// é€’å½’ç»ˆç‚¹
 	if (path[u][v] == -1)
 	{
 		printf("%d ->", u);
 		return;
 	}
-	// Íùºó¼ÌĞøµİ¹éÊä³öÂ·¾¶Õ¾µã
+	// å¾€åç»§ç»­é€’å½’è¾“å‡ºè·¯å¾„ç«™ç‚¹
 	int mid = path[u][v];
 	traverse(u, mid);
 	traverse(mid, v);
 }
 
-//	5¡¢Aµ½B¾­¹ık¸ö²»Í¬¶¥µã£¨¿ÉÒÔ¶àÓÚk¸ö¶¥µã£¬µ«²»ÄÜÉÙÓÚ£©¡¢ºÄÊ±²»³¬¹ıC¡¢ÓĞÈ¤¶È×î´óµÄÂ·¾¶
+//	5ã€Aåˆ°Bç»è¿‡kä¸ªä¸åŒé¡¶ç‚¹ï¼ˆå¯ä»¥å¤šäºkä¸ªé¡¶ç‚¹ï¼Œä½†ä¸èƒ½å°‘äºï¼‰ã€è€—æ—¶ä¸è¶…è¿‡Cã€æœ‰è¶£åº¦æœ€å¤§çš„è·¯å¾„
 void Que_5()
 {
-	int A, B;			// ¶¥µãAÎª³ö·¢µã£¬BÎªÄ¿±êµã
+	int A, B;			// é¡¶ç‚¹Aä¸ºå‡ºå‘ç‚¹ï¼ŒBä¸ºç›®æ ‡ç‚¹
 	int op, k;
 	int low, hi, citynum;
 	int mostlong;
 
-	init_Good();		// ³õÊ¼»¯×îÓÅÂ·¾¶
-	level = 0;			// µİ¹éÉî¶È
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥£¬0ÎªÕ»µ×
+	init_Good();		// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+	level = 0;			// é€’å½’æ·±åº¦
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶ï¼Œ0ä¸ºæ ˆåº•
 	addfun = 0;
 	addtime = 0;
 	tip();
@@ -666,13 +661,13 @@ void Que_5()
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈë³ö·¢µã£º");
+	printf("è¯·è¾“å…¥å‡ºå‘ç‚¹ï¼š");
 	scanf("%d", &A);
-	printf("ÇëÊäÈëÄ¿±êµã£º");
+	printf("è¯·è¾“å…¥ç›®æ ‡ç‚¹ï¼š");
 	scanf("%d", &B);
-	printf("ÇëÊäÈë×îÉÙ¾­¹ıµÄ¶¥µãÊıÁ¿£º");
+	printf("è¯·è¾“å…¥æœ€å°‘ç»è¿‡çš„é¡¶ç‚¹æ•°é‡ï¼š");
 	scanf("%d", &k);
-	printf("ÇëÊäÈë¿ÉÒÔ½ÓÊÜµÄ×î³¤Ê±¼ä(Ğ¡Ê±)£º");
+	printf("è¯·è¾“å…¥å¯ä»¥æ¥å—çš„æœ€é•¿æ—¶é—´(å°æ—¶)ï¼š");
 	scanf("%d", &mostlong);
 	mostlong *= 10;
 
@@ -681,33 +676,33 @@ void Que_5()
 
 	DFS_K_MostFun(A, B, low, hi, citynum, mostlong, k);
 
-	// ´æÔÚ×îÓĞÈ¤µÄÂ·¾¶
+	// å­˜åœ¨æœ€æœ‰è¶£çš„è·¯å¾„
 	if (Good.len != 0)
 	{
-		printf("\n³É¹¦ÕÒµ½×îÓĞÈ¤µÄÂ·¾¶£¡\n\n\t");
+		printf("\næˆåŠŸæ‰¾åˆ°æœ€æœ‰è¶£çš„è·¯å¾„ï¼\n\n\t");
 		for (int i = 1; i < Good.len; i++)
 			printf("%d ->", Good.best_path[i]);
 		printf("%d\n\n", Good.best_path[Good.len]);
-		printf("¸ÃÂ·¾¶ÓĞÈ¤¶È£º%d\n\n", Good.addfun);
-		printf("¸ÃÂ·¾¶Ê±¼ä£º%.1lf£¨h£©\n\n", Good.addtime/10.0);
-		printf("%dµ½%d¾­¹ıµÄ¶¥µãÊıÎª£º%d\n\n", A, B, Good.len-2);
+		printf("è¯¥è·¯å¾„æœ‰è¶£åº¦ï¼š%d\n\n", Good.addfun);
+		printf("è¯¥è·¯å¾„æ—¶é—´ï¼š%.1lfï¼ˆhï¼‰\n\n", Good.addtime/10.0);
+		printf("%dåˆ°%dç»è¿‡çš„é¡¶ç‚¹æ•°ä¸ºï¼š%d\n\n", A, B, Good.len-2);
 	}
 	else
-		printf("\nÃ»ÓĞÂú×ãÌõ¼şµÄÂ·¾¶£¡\n\n");
+		printf("\næ²¡æœ‰æ»¡è¶³æ¡ä»¶çš„è·¯å¾„ï¼\n\n");
 }
 
-//	6¡¢ÓĞÏŞµÄÊ±¼ä£¨ÈçxÌì£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
+//	6ã€æœ‰é™çš„æ—¶é—´ï¼ˆå¦‚xå¤©ï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
 void Que_6()
 {
-	int A, B;			// ¶¥µãAÎª³ö·¢µã£¬BÎªÄ¿±êµã
+	int A, B;			// é¡¶ç‚¹Aä¸ºå‡ºå‘ç‚¹ï¼ŒBä¸ºç›®æ ‡ç‚¹
 	int op;
 	int low, hi, citynum;
 	int mostlong;
 
-	init_Good();		// ³õÊ¼»¯×îÓÅÂ·¾¶
-	init_bestway();		// ³õÊ¼»¯ÂÃĞĞ·½Ê½
-	level = 0;			// µİ¹éÉî¶È
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥£¬0ÎªÕ»µ×
+	init_Good();		// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+	init_bestway();		// åˆå§‹åŒ–æ—…è¡Œæ–¹å¼
+	level = 0;			// é€’å½’æ·±åº¦
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶ï¼Œ0ä¸ºæ ˆåº•
 	addfun = 0;
 	addtime = 0;
 	tip();
@@ -715,11 +710,11 @@ void Que_6()
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈë³ö·¢µã£º");
+	printf("è¯·è¾“å…¥å‡ºå‘ç‚¹ï¼š");
 	scanf("%d", &A);
-	printf("ÇëÊäÈëÄ¿±êµã£º");
+	printf("è¯·è¾“å…¥ç›®æ ‡ç‚¹ï¼š");
 	scanf("%d", &B);
-	printf("ÇëÊäÈë¿ÉÒÔ½ÓÊÜµÄ×î³¤Ê±¼ä(Ìì)£º");
+	printf("è¯·è¾“å…¥å¯ä»¥æ¥å—çš„æœ€é•¿æ—¶é—´(å¤©)ï¼š");
 	scanf("%d", &mostlong);
 	mostlong *= (24 * 10);
 
@@ -728,10 +723,10 @@ void Que_6()
 
 	DFS_Time_MostFun(A, B, low, hi, citynum, mostlong);
 
-	// ´æÔÚ×îÓĞÈ¤µÄÂ·¾¶
+	// å­˜åœ¨æœ€æœ‰è¶£çš„è·¯å¾„
 	if (Good.len != 0)
 	{
-		printf("\n³É¹¦ÕÒµ½%dÌìÄÚ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½£¡\n\n  ", mostlong/24/10);
+		printf("\næˆåŠŸæ‰¾åˆ°%då¤©å†…æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼ï¼\n\n  ", mostlong/24/10);
 		for (int i = 1; i < Good.len; i++)
 		{
 			printf("%d-", Good.best_path[i]);
@@ -749,26 +744,26 @@ void Que_6()
 		}
 			
 		printf("%d\n\n", Good.best_path[Good.len]);
-		printf("¸ÃÂÃĞĞ·½Ê½ÓĞÈ¤¶È£º%d\n\n", Good.addfun);
-		printf("¸ÃÂÃĞĞ·½Ê½Ê±¼ä£º%.1lf£¨h£©\n\n", Good.addtime / 10.0);
+		printf("è¯¥æ—…è¡Œæ–¹å¼æœ‰è¶£åº¦ï¼š%d\n\n", Good.addfun);
+		printf("è¯¥æ—…è¡Œæ–¹å¼æ—¶é—´ï¼š%.1lfï¼ˆhï¼‰\n\n", Good.addtime / 10.0);
 	}
 	else
-		printf("\nÃ»ÓĞÂú×ãÌõ¼şµÄÂ·¾¶£¡\n\n");
+		printf("\næ²¡æœ‰æ»¡è¶³æ¡ä»¶çš„è·¯å¾„ï¼\n\n");
 }
 
-//	7¡¢ÓĞÏŞµÄ¾­·Ñ£¨ÈçxÔª£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
+//	7ã€æœ‰é™çš„ç»è´¹ï¼ˆå¦‚xå…ƒï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
 int addmoney;
 void Que_7()
 {
-	int A, B;			// ¶¥µãAÎª³ö·¢µã£¬BÎªÄ¿±êµã
+	int A, B;			// é¡¶ç‚¹Aä¸ºå‡ºå‘ç‚¹ï¼ŒBä¸ºç›®æ ‡ç‚¹
 	int op;
 	int low, hi, citynum;
 	int mostmoney;
 
-	init_bestway();		// ³õÊ¼»¯ÂÃĞĞ·½Ê½
-	init_Good();		// ³õÊ¼»¯×îÓÅÂ·¾¶
-	level = 0;			// µİ¹éÉî¶È
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥£¬0ÎªÕ»µ×
+	init_bestway();		// åˆå§‹åŒ–æ—…è¡Œæ–¹å¼
+	init_Good();		// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+	level = 0;			// é€’å½’æ·±åº¦
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶ï¼Œ0ä¸ºæ ˆåº•
 	addfun = 0;
 	addmoney = 0;
 	tip();
@@ -776,11 +771,11 @@ void Que_7()
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈë³ö·¢µã£º");
+	printf("è¯·è¾“å…¥å‡ºå‘ç‚¹ï¼š");
 	scanf("%d", &A);
-	printf("ÇëÊäÈëÄ¿±êµã£º");
+	printf("è¯·è¾“å…¥ç›®æ ‡ç‚¹ï¼š");
 	scanf("%d", &B);
-	printf("ÇëÊäÈëÔ¤Ëã(Ôª)£º");
+	printf("è¯·è¾“å…¥é¢„ç®—(å…ƒ)ï¼š");
 	scanf("%d", &mostmoney);
 
 	push(A);
@@ -788,10 +783,10 @@ void Que_7()
 
 	DFS_Money_MostFun(A, B, low, hi, citynum, mostmoney);
 
-	// ´æÔÚ×îÓĞÈ¤µÄÂ·¾¶
+	// å­˜åœ¨æœ€æœ‰è¶£çš„è·¯å¾„
 	if (Good.len != 0)
 	{
-		printf("\n³É¹¦ÕÒµ½ %d ÔªÄÚ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½£¡\n\n  ", mostmoney);
+		printf("\næˆåŠŸæ‰¾åˆ° %d å…ƒå†…æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼ï¼\n\n  ", mostmoney);
 		for (int i = 1; i < Good.len; i++)
 		{
 			printf("%d-", Good.best_path[i]);
@@ -807,26 +802,26 @@ void Que_7()
 		}
 
 		printf("%d\n\n", Good.best_path[Good.len]);
-		printf("¸ÃÂÃĞĞ·½Ê½ÓĞÈ¤¶È£º%d\n\n", Good.addfun);
-		printf("¸ÃÂÃĞĞ·½Ê½»¨·Ñ %d Ôª\n\n", Good.addmoney);
+		printf("è¯¥æ—…è¡Œæ–¹å¼æœ‰è¶£åº¦ï¼š%d\n\n", Good.addfun);
+		printf("è¯¥æ—…è¡Œæ–¹å¼èŠ±è´¹ %d å…ƒ\n\n", Good.addmoney);
 	}
 	else
-		printf("\nÃ»ÓĞÂú×ãÌõ¼şµÄÂ·¾¶£¡\n\n");
+		printf("\næ²¡æœ‰æ»¡è¶³æ¡ä»¶çš„è·¯å¾„ï¼\n\n");
 }
 
-//	8¡¢×ÛºÏ6ºÍ7µÄÏŞÖÆ£¬Çó½âÍ¬ÉÏ
+//	8ã€ç»¼åˆ6å’Œ7çš„é™åˆ¶ï¼Œæ±‚è§£åŒä¸Š
 void Que_8()
 {
-	int A, B;			// ¶¥µãAÎª³ö·¢µã£¬BÎªÄ¿±êµã
+	int A, B;			// é¡¶ç‚¹Aä¸ºå‡ºå‘ç‚¹ï¼ŒBä¸ºç›®æ ‡ç‚¹
 	int op;
 	int low, hi, citynum;
 	int mostmoney;
 	int mostlong;
 
-	init_Good();		// ³õÊ¼»¯×îÓÅÂ·¾¶
-	init_bestway();		// ³õÊ¼»¯ÂÃĞĞ·½Ê½
-	level = 0;			// µİ¹éÉî¶È
-	S.top = 0;			// ³õÊ¼»¯Õ»¶¥£¬0ÎªÕ»µ×
+	init_Good();		// åˆå§‹åŒ–æœ€ä¼˜è·¯å¾„
+	init_bestway();		// åˆå§‹åŒ–æ—…è¡Œæ–¹å¼
+	level = 0;			// é€’å½’æ·±åº¦
+	S.top = 0;			// åˆå§‹åŒ–æ ˆé¡¶ï¼Œ0ä¸ºæ ˆåº•
 	addfun = 0;
 	addmoney = 0;
 	tip();
@@ -834,14 +829,14 @@ void Que_8()
 	scanf("%d", &op);
 	Change_pro(op, low, hi);
 	citynum = hi - low + 1;
-	printf("ÇëÊäÈë³ö·¢µã£º");
+	printf("è¯·è¾“å…¥å‡ºå‘ç‚¹ï¼š");
 	scanf("%d", &A);
-	printf("ÇëÊäÈëÄ¿±êµã£º");
+	printf("è¯·è¾“å…¥ç›®æ ‡ç‚¹ï¼š");
 	scanf("%d", &B);
-	printf("ÇëÊäÈë¿ÉÒÔ½ÓÊÜµÄ×î³¤Ê±¼ä(Ìì)£º");
+	printf("è¯·è¾“å…¥å¯ä»¥æ¥å—çš„æœ€é•¿æ—¶é—´(å¤©)ï¼š");
 	scanf("%d", &mostlong);
 	mostlong *= (24 * 10);
-	printf("ÇëÊäÈëÔ¤Ëã(Ôª)£º");
+	printf("è¯·è¾“å…¥é¢„ç®—(å…ƒ)ï¼š");
 	scanf("%d", &mostmoney);
 
 	push(A);
@@ -849,10 +844,10 @@ void Que_8()
 
 	DFS_TimeMoney_MostFun(A, B, low, hi, citynum, mostlong, mostmoney);
 
-	// ´æÔÚ×îÓĞÈ¤µÄÂ·¾¶
+	// å­˜åœ¨æœ€æœ‰è¶£çš„è·¯å¾„
 	if (Good.len != 0)
 	{
-		printf("\n³É¹¦ÕÒµ½ %d Ğ¡Ê±ºÍ %d ÔªÄÚ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½£¡\n\n  ", mostlong / 24 / 10, mostmoney);
+		printf("\næˆåŠŸæ‰¾åˆ° %d å°æ—¶å’Œ %d å…ƒå†…æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼ï¼\n\n  ", mostlong / 24 / 10, mostmoney);
 		for (int i = 1; i < Good.len; i++)
 		{
 			printf("%d-", Good.best_path[i]);
@@ -868,18 +863,18 @@ void Que_8()
 		}
 
 		printf("%d\n\n", Good.best_path[Good.len]);
-		printf("¸ÃÂÃĞĞ·½Ê½ÓĞÈ¤¶È£º%d\n\n", Good.addfun);
-		printf("¸ÃÂÃĞĞ·½Ê½»¨·Ñ %d Ôª\n\n", Good.addmoney);
-		printf("¸ÃÂÃĞĞ·½Ê½ºÄÊ± %.1lf Ê±\n\n", Good.addtime / 10.0);
+		printf("è¯¥æ—…è¡Œæ–¹å¼æœ‰è¶£åº¦ï¼š%d\n\n", Good.addfun);
+		printf("è¯¥æ—…è¡Œæ–¹å¼èŠ±è´¹ %d å…ƒ\n\n", Good.addmoney);
+		printf("è¯¥æ—…è¡Œæ–¹å¼è€—æ—¶ %.1lf æ—¶\n\n", Good.addtime / 10.0);
 	}
 	else
-		printf("\nÃ»ÓĞÂú×ãÌõ¼şµÄÂ·¾¶£¡\n\n");
+		printf("\næ²¡æœ‰æ»¡è¶³æ¡ä»¶çš„è·¯å¾„ï¼\n\n");
 }
 
-//	ÕÒ¹Ø½ÚµãºÍÇÅ
+//	æ‰¾å…³èŠ‚ç‚¹å’Œæ¡¥
 void FindBridge()
 {
-	printf("\n\n-----¹Ø½Úµã-----\n");
+	printf("\n\n-----å…³èŠ‚ç‚¹-----\n");
 	for (int i = 1; i <= 51; i++)
 	{
 		if (g[i][0] != 0 && 0 == pre[i])
@@ -894,7 +889,7 @@ void FindBridge()
 			printf("       %d\n", i);
 	}
 	printf("\n");
-	printf("\n-------ÇÅ-------\n");
+	printf("\n-------æ¡¥-------\n");
 	for (int i = 1; i <= len_bridge; ++i) {
 		printf("    %d -- %d\n", bridge[i].u, bridge[i].v);
 	}
@@ -902,16 +897,16 @@ void FindBridge()
 
 
 /********************** DFS **************************/
-//	2¡¢DFS¹şÃÜ¶Ù
+//	2ã€DFSå“ˆå¯†é¡¿
 void DFS_Hamilton(int start, int cur, int low, int hi, int citynum)
 {
 	level++;
 	if (level == citynum)
 	{
-		// Â·¾¶¾­¹ıËùÓĞµã²¢ÇÒÄÜ¹»¹¹³É»ØÂ·
+		// è·¯å¾„ç»è¿‡æ‰€æœ‰ç‚¹å¹¶ä¸”èƒ½å¤Ÿæ„æˆå›è·¯
 		if (graph[cur][start].ch != 0 && fl == 0)
 		{
-			printf("\n³É¹¦ÕÒµ½Ò»Ìõ¹şÃÜ¶Ù»ØÂ·£¡\n\n\t");
+			printf("\næˆåŠŸæ‰¾åˆ°ä¸€æ¡å“ˆå¯†é¡¿å›è·¯ï¼\n\n\t");
 			for (int i = 1; i <= S.top; i++)
 				printf("%d ->", S.dis[i]);
 			printf("%d\n\n", start);
@@ -936,7 +931,7 @@ void DFS_Hamilton(int start, int cur, int low, int hi, int citynum)
 	}
 }
 
-//	3¡¢DFSÂú×ãÌõ¼ş£¬Ö¸¶¨k¸ö¶¥µãµÄ»ØÂ·
+//	3ã€DFSæ»¡è¶³æ¡ä»¶ï¼ŒæŒ‡å®škä¸ªé¡¶ç‚¹çš„å›è·¯
 void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 {
 	level++;
@@ -944,7 +939,7 @@ void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 	switch (traff)
 	{
 	case 1:
-		// Ö¸¶¨µÄ¶¥µãÔÚÖ¸¶¨Ô¤ËãÄÚÒÑÈ«²¿°üº¬ÇÒ¹¹³É»ØÂ·µÄÇé¿öÏÂ£¬ÓĞÈ¤¶È±È×îÓÅÂ·¾¶µÄ´ó£¬¸üĞÂ×îÓÅÂ·¾¶
+		// æŒ‡å®šçš„é¡¶ç‚¹åœ¨æŒ‡å®šé¢„ç®—å†…å·²å…¨éƒ¨åŒ…å«ä¸”æ„æˆå›è·¯çš„æƒ…å†µä¸‹ï¼Œæœ‰è¶£åº¦æ¯”æœ€ä¼˜è·¯å¾„çš„å¤§ï¼Œæ›´æ–°æœ€ä¼˜è·¯å¾„
 		if (is_all() && graph[S.dis[S.top]][start].air.dig != 0 && add_fun > Good.addfun)
 		{
 			if ((add_money + graph[S.dis[S.top]][start].air.cost) > min_money)
@@ -990,7 +985,7 @@ void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 		break;
 	}
 
-	if (add_money > min_money || level >= citynum)		// ³¬³öÔ¤Ëã»òÕß´ïµ½µİ¹éÖÕµã
+	if (add_money > min_money || level >= citynum)		// è¶…å‡ºé¢„ç®—æˆ–è€…è¾¾åˆ°é€’å½’ç»ˆç‚¹
 		return;
 
 	for (int i = low; i <= hi; i++)
@@ -1000,14 +995,14 @@ void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 		case 1:
 			if (graph[cur][i].air.dig != 0 && flag[i] == 0)
 			{
-				add_fun += graph[cur][i].air.fun;		// ¸üĞÂµ±Ç°ÓĞÈ¤¶È×ÜºÍ
-				add_money += graph[cur][i].air.cost;	// ¸üĞÂµ±Ç°»¨·Ñ×ÜºÍ
+				add_fun += graph[cur][i].air.fun;		// æ›´æ–°å½“å‰æœ‰è¶£åº¦æ€»å’Œ
+				add_money += graph[cur][i].air.cost;	// æ›´æ–°å½“å‰èŠ±è´¹æ€»å’Œ
 				flag[i] = 1;
 				push(i);
 				DFS_MostFun(start, i, low, hi, citynum, traff);
 				int ls = pop();
-				add_fun -= graph[cur][i].air.fun;		// ¸üĞÂµ±Ç°ÓĞÈ¤¶È×ÜºÍ
-				add_money -= graph[cur][i].air.cost;	// ¸üĞÂµ±Ç°»¨·Ñ×ÜºÍ
+				add_fun -= graph[cur][i].air.fun;		// æ›´æ–°å½“å‰æœ‰è¶£åº¦æ€»å’Œ
+				add_money -= graph[cur][i].air.cost;	// æ›´æ–°å½“å‰èŠ±è´¹æ€»å’Œ
 				level--;
 				flag[i] = 0;
 			}
@@ -1015,14 +1010,14 @@ void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 		case 2:
 			if (graph[cur][i].train.dig != 0 && flag[i] == 0)
 			{
-				add_fun += graph[cur][i].train.fun;		// ¸üĞÂµ±Ç°ÓĞÈ¤¶È×ÜºÍ
-				add_money += graph[cur][i].train.cost;	// ¸üĞÂµ±Ç°»¨·Ñ×ÜºÍ
+				add_fun += graph[cur][i].train.fun;		// æ›´æ–°å½“å‰æœ‰è¶£åº¦æ€»å’Œ
+				add_money += graph[cur][i].train.cost;	// æ›´æ–°å½“å‰èŠ±è´¹æ€»å’Œ
 				flag[i] = 1;
 				push(i);
 				DFS_MostFun(start, i, low, hi, citynum, traff);
 				int ls = pop();
-				add_fun -= graph[cur][i].train.fun;		// ¸üĞÂµ±Ç°ÓĞÈ¤¶È×ÜºÍ
-				add_money -= graph[cur][i].train.cost;	// ¸üĞÂµ±Ç°»¨·Ñ×ÜºÍ
+				add_fun -= graph[cur][i].train.fun;		// æ›´æ–°å½“å‰æœ‰è¶£åº¦æ€»å’Œ
+				add_money -= graph[cur][i].train.cost;	// æ›´æ–°å½“å‰èŠ±è´¹æ€»å’Œ
 				level--;
 				flag[i] = 0;
 			}
@@ -1030,14 +1025,14 @@ void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 		case 3:
 			if (graph[cur][i].car.dig != 0 && flag[i] == 0)
 			{
-				add_fun += graph[cur][i].car.fun;		// ¸üĞÂµ±Ç°ÓĞÈ¤¶È×ÜºÍ
-				add_money += graph[cur][i].car.cost;	// ¸üĞÂµ±Ç°»¨·Ñ×ÜºÍ
+				add_fun += graph[cur][i].car.fun;		// æ›´æ–°å½“å‰æœ‰è¶£åº¦æ€»å’Œ
+				add_money += graph[cur][i].car.cost;	// æ›´æ–°å½“å‰èŠ±è´¹æ€»å’Œ
 				flag[i] = 1;
 				push(i);
 				DFS_MostFun(start, i, low, hi, citynum, traff);
 				int ls = pop();
-				add_fun -= graph[cur][i].car.fun;		// ¸üĞÂµ±Ç°ÓĞÈ¤¶È×ÜºÍ
-				add_money -= graph[cur][i].car.cost;	// ¸üĞÂµ±Ç°»¨·Ñ×ÜºÍ
+				add_fun -= graph[cur][i].car.fun;		// æ›´æ–°å½“å‰æœ‰è¶£åº¦æ€»å’Œ
+				add_money -= graph[cur][i].car.cost;	// æ›´æ–°å½“å‰èŠ±è´¹æ€»å’Œ
 				level--;
 				flag[i] = 0;
 			}
@@ -1047,11 +1042,11 @@ void DFS_MostFun(int start, int cur, int low, int hi, int citynum, int traff)
 	}
 }
 
-//	4¡¢DFS×îÓĞÈ¤µÄÂ·
+//	4ã€DFSæœ€æœ‰è¶£çš„è·¯
 void DFS_fun(int cur, int aim, int low, int hi, int citynum)
 {
 	level++;
-	// µ±Ç°Â·¾¶ÓĞÈ¤¶ÈÖ®ºÍÒÑ³¬¹ı×îÓÅÂ·¾¶µÄÓĞÈ¤¶È
+	// å½“å‰è·¯å¾„æœ‰è¶£åº¦ä¹‹å’Œå·²è¶…è¿‡æœ€ä¼˜è·¯å¾„çš„æœ‰è¶£åº¦
 	if (cur == aim && addfun > Good.addfun)
 	{
 		for (int i = 1; i <= S.top; i++)
@@ -1088,12 +1083,12 @@ void DFS_fun(int cur, int aim, int low, int hi, int citynum)
 	}
 }
 
-//	5¡¢DFS¾­¹ık¸ö²»Í¬¶¥µã£¨¿ÉÒÔ¶àÓÚk¸ö¶¥µã£¬µ«²»ÄÜÉÙÓÚ£©¡¢ºÄÊ±²»³¬¹ıC¡¢ÓĞÈ¤¶È×î´óµÄÂ·¾¶
+//	5ã€DFSç»è¿‡kä¸ªä¸åŒé¡¶ç‚¹ï¼ˆå¯ä»¥å¤šäºkä¸ªé¡¶ç‚¹ï¼Œä½†ä¸èƒ½å°‘äºï¼‰ã€è€—æ—¶ä¸è¶…è¿‡Cã€æœ‰è¶£åº¦æœ€å¤§çš„è·¯å¾„
 void DFS_K_MostFun(int cur, int aim, int low, int hi, int citynum, int mostlong, int k)
 {
 	level++;
 	
-	// µ±Ç°Â·¾¶ÓĞÈ¤¶ÈÖ®ºÍÒÑ³¬¹ı×îÓÅÂ·¾¶µÄÓĞÈ¤¶È
+	// å½“å‰è·¯å¾„æœ‰è¶£åº¦ä¹‹å’Œå·²è¶…è¿‡æœ€ä¼˜è·¯å¾„çš„æœ‰è¶£åº¦
 	if (addtime <= mostlong && S.top >= k + 2 && cur == aim && addfun > Good.addfun)
 	{
 		for (int i = 1; i <= S.top; i++)
@@ -1144,12 +1139,12 @@ void DFS_K_MostFun(int cur, int aim, int low, int hi, int citynum, int mostlong,
 	}
 }
 
-//	6¡¢DFSÓĞÏŞµÄÊ±¼ä£¨ÈçxÌì£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
+//	6ã€DFSæœ‰é™çš„æ—¶é—´ï¼ˆå¦‚xå¤©ï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
 void DFS_Time_MostFun(int cur, int aim, int low, int hi, int citynum, int mostlong)
 {
 	level++;
 
-	// µ±Ç°Â·¾¶ÓĞÈ¤¶ÈÖ®ºÍÒÑ³¬¹ı×îÓÅÂ·¾¶µÄÓĞÈ¤¶È
+	// å½“å‰è·¯å¾„æœ‰è¶£åº¦ä¹‹å’Œå·²è¶…è¿‡æœ€ä¼˜è·¯å¾„çš„æœ‰è¶£åº¦
 	if (addtime <= mostlong && cur == aim && addfun > Good.addfun)
 	{
 		for (int i = 1; i <= S.top; i++)
@@ -1213,12 +1208,12 @@ void DFS_Time_MostFun(int cur, int aim, int low, int hi, int citynum, int mostlo
 	}
 }
 
-//	7¡¢DFSÓĞÏŞµÄ¾­·Ñ£¨ÈçxÔª£©ÄÚ£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
+//	7ã€DFSæœ‰é™çš„ç»è´¹ï¼ˆå¦‚xå…ƒï¼‰å†…ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
 void DFS_Money_MostFun(int cur, int aim, int low, int hi, int citynum, int mostmoney)
 {
 	level++;
 
-	// µ±Ç°Â·¾¶ÓĞÈ¤¶ÈÖ®ºÍÒÑ³¬¹ı×îÓÅÂ·¾¶µÄÓĞÈ¤¶È
+	// å½“å‰è·¯å¾„æœ‰è¶£åº¦ä¹‹å’Œå·²è¶…è¿‡æœ€ä¼˜è·¯å¾„çš„æœ‰è¶£åº¦
 	if (addmoney <= mostmoney && cur == aim && addfun > Good.addfun)
 	{
 		for (int i = 1; i <= S.top; i++)
@@ -1282,12 +1277,12 @@ void DFS_Money_MostFun(int cur, int aim, int low, int hi, int citynum, int mostm
 	}
 }
 
-//	8¡¢DFS×ÛºÏ6¡¢7Ìõ¼ş£¬Ñ°ÕÒÒ»Ìõ´Ó¶¥µãaµ½¶¥µãbµÄ×îÓĞÈ¤µÄÂÃĞĞ·½Ê½
+//	8ã€DFSç»¼åˆ6ã€7æ¡ä»¶ï¼Œå¯»æ‰¾ä¸€æ¡ä»é¡¶ç‚¹aåˆ°é¡¶ç‚¹bçš„æœ€æœ‰è¶£çš„æ—…è¡Œæ–¹å¼
 void DFS_TimeMoney_MostFun(int cur, int aim, int low, int hi, int citynum, int mostlong, int mostmoney)
 {
 	level++;
 
-	// µ±Ç°Â·¾¶ÓĞÈ¤¶ÈÖ®ºÍÒÑ³¬¹ı×îÓÅÂ·¾¶µÄÓĞÈ¤¶È
+	// å½“å‰è·¯å¾„æœ‰è¶£åº¦ä¹‹å’Œå·²è¶…è¿‡æœ€ä¼˜è·¯å¾„çš„æœ‰è¶£åº¦
 	if (addfun > Good.addfun && addtime <= mostlong && addmoney <= mostmoney && cur == aim)
 	{
 		for (int i = 1; i <= S.top; i++)
@@ -1358,11 +1353,11 @@ void DFS_TimeMoney_MostFun(int cur, int aim, int low, int hi, int citynum, int m
 	}
 }
 
-//	9¡¢DFSÇÅ
+//	9ã€DFSæ¡¥
 int Dfs_bridge(int u, int fa)
 {
 	int lowu = pre[u] = ++dfs_clock;
-	int child = 0;				// ×Ó½Úµã¸öÊı
+	int child = 0;				// å­èŠ‚ç‚¹ä¸ªæ•°
 
 	for (int i = 1; i <= g[u][0]; ++i) {
 		int v = g[u][i];
@@ -1373,10 +1368,10 @@ int Dfs_bridge(int u, int fa)
 			if (lowu > lowv)
 				lowu = lowv;
 			if (lowv >= pre[u]) {
-				iscut[u] = true;					// ¸îµã
+				iscut[u] = true;					// å‰²ç‚¹
 				if (lowv > pre[u])
 				{
-					// ÇÅ
+					// æ¡¥
 					len_bridge++;
 					bridge[len_bridge].u = u;
 					bridge[len_bridge].v = v;
@@ -1384,13 +1379,13 @@ int Dfs_bridge(int u, int fa)
 				}
 			}
 		}
-		else if (pre[v] < pre[u] && v != fa) {		// ·´Ïò±ß(u,v)
+		else if (pre[v] < pre[u] && v != fa) {		// åå‘è¾¹(u,v)
 			if (lowu > pre[v])
 				lowu = pre[v];
 		}
 	}
 	if (fa < 0 && child == 1)
-		iscut[u] = false;//ÅĞ¶Ï¸ù½áµã
+		iscut[u] = false;//åˆ¤æ–­æ ¹ç»“ç‚¹
 	low[u] = lowu;
 
 	return lowu;
